@@ -1,11 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "contact.h"
-#include "stdlib.h"
-
 
 int main() 
 {
-    int choice;
+    short choice;
     AddressBook addressBook;
     initialize(&addressBook); // Initialize the address book
     
@@ -25,7 +24,7 @@ int main()
         printf("|   7   |   %-25s |\n","EXIT");
         printf("---------------------------------------\n"); 
         printf("Enter your choice: ");
-        scanf("%d", &choice);
+        scanf("%hd", &choice);
         printf("\n");
         
         switch (choice) 
@@ -34,7 +33,7 @@ int main()
                 createContact(&addressBook);
                 break;
             case 2:
-                searchContact(&addressBook);
+                searchContact(&addressBook, 0);
                 break;
             case 3:
                 editContact(&addressBook);

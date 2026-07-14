@@ -1,4 +1,2 @@
-#3
-adlri,6382667634,fdfd@gfg.in
-aldrin3,6382665645,adf@fd.in
-aldrin3,6382665645,adf@fd.in
+#1
+aldrin,6382667630,aldring@karunya.edu.in
