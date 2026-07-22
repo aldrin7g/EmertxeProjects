@@ -5,7 +5,7 @@
 #include "contact.h"
 #include "modules.h"
 
-char isalphanum(char c){
+char isalphanum(char c){ //check if alpha-numeric character or not
     if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
         return 1;
 
