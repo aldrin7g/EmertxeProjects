@@ -5,11 +5,11 @@
 #include "contact.h"
 #include "modules.h"
 
-char isalphanum(char c){ //check if alpha-numeric character or not
+status isalphanum(char c){ //check if alpha-numeric character or not
     if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
-        return 1;
+        return valid;
 
-    return 0;
+    return invalid;
 }
 
 void displayContact(AddressBook *addressBook, short index){
@@ -23,7 +23,7 @@ void displayContact(AddressBook *addressBook, short index){
     printf("---------------------------------------\n\n");  
 }
 
-char validate_name(char *name){
+nameStatus validate_name(char *name){
     // LOOP till name[i] != '\0'
     //     check name[i] is not in the range of A to Z, a to z, ' ', '.'
     //         return 0; // invalid
@@ -31,42 +31,42 @@ char validate_name(char *name){
 
     for(char i = 0; name[i]!='\0'; i++){
         if(!((name[i]>='A' && name[i]<='Z')||(name[i]>='a' && name[i]<='z')||(name[i]==' ')||(name[i]=='.')))
-            return 0;
+            return invalidName;
     }
 
-    return 1; // valid.
+    return validName; // valid.
 }
 
-char validate_phone(char *phone, AddressBook *addressBook){
+phoneStatus validate_phone(char *phone, AddressBook *addressBook){
     //check the length
          // != 10  ==> return 0 (invalid)
     if(strlen(phone)!=10) 
-            return 1;
+            return invalidLength;
 
     // Loop till str[i] != '\0'
     //     check the str[i] is not in the rage '0' to '9'
     //         return 1; invalid
     for(char i = 0; phone[i]!='\0'; i++){
         if(!(phone[i]>='0' && phone[i]<='9'))
-            return 2;
+            return invalidPhone;
     }
 
     // check unique or not
     //     not => return 0;
     for(short i=0; i<addressBook->contactCount; i++){
         if(strcmp(phone,addressBook->contacts[i].phone)==0) 
-            return 3;
+            return duplicatePhone;
     }
 
-    return 0; // valid;
+    return validPhone; // valid;
 }
 
-char validate_email(char *str, AddressBook *addressBook){
+emailStatus validate_email(char *str, AddressBook *addressBook){
      int atCount = 0, atPos = -1, dotPos = -1;
      int len = strlen(str);
      //min email: a@b.i
      if(len<5)
-        return 0;
+        return invalidEmail;
 
      for(char i = 0; i<len; i++){
         if(str[i] == '@'){
@@ -77,25 +77,25 @@ char validate_email(char *str, AddressBook *addressBook){
             dotPos = i;
             if(i<len-1){
                 if(str[i]==str[i+1])
-                    return 0;
+                    return invalidEmail;
             }
         }
         else if(!(isalphanum(str[i]) || (str[i]=='-') || (str[i]=='_') || (str[i]=='+')))
-            return 0;
+            return invalidEmail;
      }
      if(atCount==0 || atCount>1)
-        return 0;
+        return invalidEmail;
      else if(atPos==0 || atPos==len-1)
-        return 0;
+        return invalidEmail;
      else if(dotPos<=atPos+1 || dotPos==len-1)
-        return 0;
+        return invalidEmail;
 
      for(short i = 0; i<addressBook->contactCount; i++){
         if(strcmp(addressBook->contacts[i].email,str) == 0)
-            return 2;
+            return duplicateEmail;
      }
 
-     return 1;
+     return validEmail;
 }
 
 void inputName(char *name){
@@ -104,7 +104,8 @@ void inputName(char *name){
         printf("Enter the Name : ");
         scanf(" %[^\n]", name);
 
-        if(validate_name(name))
+        nameStatus status = validate_name(name);
+        if(status == validName)
             break;
         else
             printf("Invalid Name!\n");
@@ -116,14 +117,15 @@ void inputPhone(char *phone, AddressBook *addressBook){
     {
         printf("Enter the PhoneNo : ");
         scanf(" %[^\n]", phone);
-        char res = validate_phone(phone, addressBook);
-        if(res == 0)
+        phoneStatus status = validate_phone(phone, addressBook);
+
+        if(status == validPhone)
             break;
-        else if(res == 1)
+        else if(status == invalidLength)
             printf("Invalid Contact Length!\n");
-        else if(res == 2) 
+        else if(status == invalidPhone) 
             printf("Invalid Phone No!\n");      
-        else if(res == 3)
+        else if(status == duplicatePhone)
             printf("Duplicate Phone No!\n");  
     }
 }
@@ -132,13 +134,13 @@ void inputEmail(char *email, AddressBook *addressBook){
     while(1){
         printf("Enter the Email : ");
         scanf(" %[^\n]", email);
-        char res = validate_email(email, addressBook);
+        emailStatus status = validate_email(email, addressBook);
 
-        if(res==0)
+        if(status == invalidEmail)
             printf("Invalid Email!\n");
-        else if(res==1)
+        else if(status == validEmail)
             break; //valid email
-        else if(res==2)
+        else if(status == duplicateEmail)
             printf("Email already exists!\n");
     }
 }

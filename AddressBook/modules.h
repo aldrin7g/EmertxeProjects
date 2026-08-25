@@ -1,11 +1,34 @@
 #ifndef MODULES_H
 #define MODULES_H
 
-char isalphanum(char c);
+typedef enum{
+    invalidName,
+    validName
+}nameStatus;
+
+typedef enum{
+   validPhone,
+   invalidLength,
+   invalidPhone,
+   duplicatePhone
+}phoneStatus;
+
+typedef enum{
+    invalidEmail,
+    validEmail,
+    duplicateEmail
+}emailStatus;
+
+typedef enum{
+    invalid,
+    valid
+}status;
+
+status isalphanum(char c);
 void displayContact(AddressBook *addressBook, short index);
-char validate_name(char *name);
-char validate_phone(char *str, AddressBook *addressBook);
-char validate_email(char *str, AddressBook *addressBook);
+nameStatus validate_name(char *name);
+phoneStatus validate_phone(char *str, AddressBook *addressBook);
+emailStatus validate_email(char *str, AddressBook *addressBook);
 void inputName(char *name);
 void inputPhone(char *mobile, AddressBook *addressBook);
 void inputEmail(char *email, AddressBook *addressBook);

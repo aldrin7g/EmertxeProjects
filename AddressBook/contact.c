@@ -59,6 +59,9 @@ void createContact(AddressBook *addressBook){
     strcpy(addressBook->contacts[addressBook->contactCount].name, name);
     strcpy(addressBook->contacts[addressBook->contactCount].phone, phone);
     strcpy(addressBook->contacts[addressBook->contactCount].email, email);
+    
+    printf("\nContact created successfully!\n");
+    displayContact(addressBook, addressBook->contactCount);
 
     addressBook->contactCount++;
 }
