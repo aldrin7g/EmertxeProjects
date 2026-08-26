@@ -283,4 +283,3 @@ void edit_mail(AddressBook *addressBook, short index){
 
     strcpy(addressBook->contacts[index].email, email);
 }
-
