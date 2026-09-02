@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "contact.h"
+#include "modules.h"
 
 int main() 
 {
@@ -12,18 +13,18 @@ int main()
 
     while(1) 
     {
-        printf("\n\n***************************************\n");    
-        printf("|           ADDRESS BOOK MENU         |\n");
-        printf("---------------------------------------\n");
-        printf("|   1   |   %-25s |\n","CREATE CONTACT");
-        printf("|   2   |   %-25s |\n","SEARCH CONTACT");
-        printf("|   3   |   %-25s |\n","EDIT CONTACT");
-        printf("|   4   |   %-25s |\n","DELETE CONTACT");
-        printf("|   5   |   %-25s |\n","LIST ALL CONTACTS");
-        printf("|   6   |   %-25s |\n","SAVE AND EXIT");
-        printf("|   7   |   %-25s |\n","EXIT");
-        printf("---------------------------------------\n"); 
-        printf("Enter your choice: ");
+        printf("\n\n" C "***************************************\n" Rst);
+        printf(C "|" Y "           ADDRESS BOOK MENU         " C "|\n" Rst);
+        printf(C "---------------------------------------\n" Rst);
+        printf(C "|   1   | " O "  %-25s" C " |\n" Rst, "CREATE CONTACT");
+        printf(C "|   2   | " O "  %-25s" C " |\n" Rst, "SEARCH CONTACT");
+        printf(C "|   3   | " O "  %-25s" C " |\n" Rst, "EDIT CONTACT");
+        printf(C "|   4   | " O "  %-25s" C " |\n" Rst, "DELETE CONTACT");
+        printf(C "|   5   | " O "  %-25s" C " |\n" Rst, "LIST ALL CONTACTS");
+        printf(C "|   6   | " O "  %-25s" C " |\n" Rst, "SAVE AND EXIT");
+        printf(C "|   7   | " O "  %-25s" C " |\n" Rst, "EXIT");
+        printf(C "---------------------------------------\n" Rst);
+        printf(B"Enter your choice: "Rst);
         scanf("%hd", &choice);
         printf("\n");
         
@@ -45,15 +46,15 @@ int main()
                 listContacts(&addressBook);
                 break;
             case 6:
-                printf("Saving and Exiting...\n\n");
+                printf(G "Saving and Exiting...\n\n" Rst);
                 saveAndExit(&addressBook);
                 break;
             case 7:
-                printf("Exiting without Saving!\n\n");
+                printf(G "Exiting without Saving!\n\n" Rst);
                 exit(0);
             
             default:
-                printf("Invalid choice. Please try again.\n");
+                printf(R "Invalid choice. Please try again.\n" Rst);
         }
     }
     

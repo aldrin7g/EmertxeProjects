@@ -13,14 +13,14 @@ status isalphanum(char c){ //check if alpha-numeric character or not
 }
 
 void displayContact(AddressBook *addressBook, short index){
-    printf("***************************************\n");    
-    printf("|           CONTACT DETAILS           |\n");
-    printf("---------------------------------------\n");
+    printf(C "***************************************\n" Rst);
+    printf(C "|" Y "           CONTACT DETAILS           " C "|\n" Rst);
+    printf(C "---------------------------------------\n" Rst);
     //printf("| S.No    | %-25d |\n",index + 1);
-    printf("| NAME    | %-25s |\n",addressBook->contacts[index].name);
-    printf("| PHONE   | %-25s |\n",addressBook->contacts[index].phone);
-    printf("| EMAIL   | %-25s |\n",addressBook->contacts[index].email);
-    printf("---------------------------------------\n\n");  
+    printf(C "| " M "NAME    " C "| " W "%-25s" C " |\n" Rst, addressBook->contacts[index].name);
+    printf(C "| " M "PHONE   " C "| " W "%-25s" C " |\n" Rst, addressBook->contacts[index].phone);
+    printf(C "| " M "EMAIL   " C "| " W "%-25s" C " |\n" Rst, addressBook->contacts[index].email);
+    printf(C "---------------------------------------\n\n" Rst); 
 }
 
 nameStatus validate_name(char *name){
@@ -101,47 +101,47 @@ emailStatus validate_email(char *str, AddressBook *addressBook){
 void inputName(char *name){
     while(1)
     {
-        printf("Enter the Name : ");
+        printf(B "Enter the Name : " Rst);
         scanf(" %[^\n]", name);
 
         nameStatus status = validate_name(name);
         if(status == validName)
             break;
         else
-            printf("Invalid Name!\n");
+            printf(R "Invalid Name!\n" Rst);
     }
 }
 
 void inputPhone(char *phone, AddressBook *addressBook){
     while(1)
     {
-        printf("Enter the PhoneNo : ");
+        printf(B "Enter the PhoneNo : " Rst);
         scanf(" %[^\n]", phone);
         phoneStatus status = validate_phone(phone, addressBook);
 
         if(status == validPhone)
             break;
         else if(status == invalidLength)
-            printf("Invalid Contact Length!\n");
+            printf(R "Invalid Contact Length!\n" Rst);
         else if(status == invalidPhone) 
-            printf("Invalid Phone No!\n");      
+            printf(R "Invalid Phone No!\n" Rst);      
         else if(status == duplicatePhone)
-            printf("Duplicate Phone No!\n");  
+            printf(R "Duplicate Phone No!\n" Rst);  
     }
 }
 
 void inputEmail(char *email, AddressBook *addressBook){
     while(1){
-        printf("Enter the Email : ");
+        printf(B "Enter the Email : " Rst);
         scanf(" %[^\n]", email);
         emailStatus status = validate_email(email, addressBook);
 
         if(status == invalidEmail)
-            printf("Invalid Email!\n");
+            printf(R "Invalid Email!\n" Rst);
         else if(status == validEmail)
             break; //valid email
         else if(status == duplicateEmail)
-            printf("Email already exists!\n");
+            printf(R "Email already exists!\n" Rst);
     }
 }
 
@@ -149,7 +149,7 @@ short search_by_name(AddressBook *addressBook, char flag){
     char str[20]; 
     //Enter the name
     //Get the name
-    printf("Enter a Name to Search: \n");
+    printf(B "Enter a Name to Search: \n" Rst);
     scanf(" %[^\n]",str);
     char count = 0;
     short ind;
@@ -168,13 +168,13 @@ short search_by_name(AddressBook *addressBook, char flag){
     printf("\n");
     // count ==> 0 ==> No match ==> return -1;
     if(count==0){
-        printf("No Record's Found!\n\n");
+        printf(R "No Record's Found!\n\n" Rst);
         return -1;
     }
 
     // count ==> 1 ==> return ind
     else if(count==1){
-        printf("Search Found at S.No.: %d!\n", ind + 1);
+        printf(G "Search Found at S.No.: %d!\n" Rst, ind + 1);
         displayContact(addressBook, ind);
         return ind;
     }
@@ -184,21 +184,21 @@ short search_by_name(AddressBook *addressBook, char flag){
         // printf("Multiple Names Found! Search by PhoneNo.\n\n");
         // return search_by_phone(addressBook);
         if(flag==0){
-            printf("Multiple Names Found!\n");
+            printf(R "Multiple Names Found!\n" Rst);
             for(char i = 0; i<count; i++){
-                printf("Contact %d:\n",i+1);
+                printf(M"Contact %d:\n"Rst,i+1);
                 displayContact(addressBook, dup[i]);
             }
             return -1;  
         }
         else{
-            printf("Multiple Names Found! Select the contact\n");
+            printf(G "Multiple Names Found! Select the contact\n" Rst);
             for(char i = 0; i<count; i++){
-                printf("Contact %d:\n",i+1);
+                printf(M "Contact %d:\n" Rst,i+1);
                 displayContact(addressBook, dup[i]);
             }
             while(1){
-                printf("\nEnter your choice 1-%d: ",count);
+                printf(B "\nEnter your choice 1-%d: " Rst,count);
                 short choice, val;
                 scanf("%hd",&choice);
                 val = dup[choice-1];
@@ -206,7 +206,7 @@ short search_by_name(AddressBook *addressBook, char flag){
 
                 if(choice>=1 && choice<=count)
                     return val;
-                printf("Invalid Choice!\n");
+                printf(R "Invalid Choice!\n" Rst);
             }
         }
     }
@@ -216,7 +216,7 @@ short search_by_phone(AddressBook *addressBook){
     char str[11];
     //Enter the phone
     //Get the phone
-    printf("Enter a PhoneNo to Search: \n");
+    printf(B "Enter a PhoneNo to Search: \n" Rst);
     scanf("%s",str);
     printf("\n");
     //Loop till contactCount
@@ -225,21 +225,21 @@ short search_by_phone(AddressBook *addressBook){
         if(strcmp(str, addressBook->contacts[ind].phone) == 0)
         {
             //print the contact
-            printf("Search Found at S.No.: %d!\n", ind + 1);
+            printf(G "Search Found at S.No.: %d!\n" Rst, ind + 1);
             displayContact(addressBook,ind);
             return ind;
         }
     }
 
     // Not found
-    printf("No Record's Found!\n\n");
+    printf(R "No Record's Found!\n\n" Rst);
     return -1;
 }
 
 short search_by_email(AddressBook *addressBook){
     char str[30];
     //Enter the Email
-    printf("Enter an Email to Search: \n");
+    printf(B "Enter an Email to Search: \n" Rst);
     scanf("%s",str);
     printf("\n");
     //Loop till contactCount
@@ -248,14 +248,14 @@ short search_by_email(AddressBook *addressBook){
         if(strcmp(str, addressBook->contacts[ind].email) == 0)
         {
             //print the contact
-            printf("Search Found at S.No.: %d!\n", ind + 1);
+            printf(G "Search Found at S.No.: %d!\n" Rst, ind + 1);
             displayContact(addressBook,ind);
             return ind;
         }
     }
 
     // Not found
-    printf("No Record's Found!\n\n");
+    printf(R "No Record's Found!\n\n" Rst);
     return -1;
 }
 

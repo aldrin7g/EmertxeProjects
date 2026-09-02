@@ -26,21 +26,18 @@ void listContacts(AddressBook *addressBook){
             }
         }
     }
-    printf("-----------------------------------------------------------------------------\n");
-    printf("|                               ADDRESS BOOK                                |\n");
-    printf("*****************************************************************************\n");
-    printf("| %-3s | %-25s | %-10s | %-25s |\n","S.No", "Name", "Phone", "Email");
-    printf("-----------------------------------------------------------------------------\n");
-
+    printf(C "-----------------------------------------------------------------------------\n" Rst);
+    printf(C "|" Y "                               ADDRESS BOOK                                " C "|\n" Rst);
+    printf(C "*****************************************************************************\n" Rst);
+    printf(C "| " M "%-3s" C " | " M "%-25s" C " | " M "%-10s" C " | " M "%-25s" C " |\n" Rst,
+        "S.No", "Name", "Phone", "Email");
+    printf(C "-----------------------------------------------------------------------------\n" Rst);
     for(short i = 0; i < ad->contactCount; i++)
     {
-        printf("|  %-3d | %-25s | %-10s | %-25s |\n", 
-            i+1, 
-            ad->contacts[i].name, 
-            ad->contacts[i].phone, 
-            ad->contacts[i].email);
+        printf(C "|  " Rst "%-3d | %-25s | %-10s | %-25s " C "|\n" Rst,
+            i+1, ad->contacts[i].name, ad->contacts[i].phone, ad->contacts[i].email);
     }
-    printf("-----------------------------------------------------------------------------\n");
+    printf(C "-----------------------------------------------------------------------------\n" Rst);
 }
 
 void createContact(AddressBook *addressBook){
@@ -60,7 +57,7 @@ void createContact(AddressBook *addressBook){
     strcpy(addressBook->contacts[addressBook->contactCount].phone, phone);
     strcpy(addressBook->contacts[addressBook->contactCount].email, email);
     
-    printf("\nContact created successfully!\n");
+    printf(G "\nContact created successfully!\n" Rst);
     displayContact(addressBook, addressBook->contactCount);
 
     addressBook->contactCount++;
@@ -71,21 +68,22 @@ short searchContact(AddressBook *addressBook, char flag){
     while(1)
     {
         //promt (printf)  
-        printf("***************************************\n");    
-        printf("|             SEARCH MODE             |\n");
-        printf("---------------------------------------\n");
-        printf("|   1   |   %-25s |\n","SEARCH BY NAME ");
-        printf("|   2   |   %-25s |\n","SEARCH BY PHONE");
-        printf("|   3   |   %-25s |\n","SEARCH BY EMAIL");
-        printf("---------------------------------------\n"); 
-        printf("Enter your choice: ");
+        printf(C "***************************************\n" Rst);
+        printf(C "|" Y "             SEARCH MODE             " C "|\n" Rst);
+        printf(C "---------------------------------------\n" Rst);
+        printf(C "|   1   | " M "  %-25s" C " |\n" Rst, "SEARCH BY NAME ");
+        printf(C "|   2   | " M "  %-25s" C " |\n" Rst, "SEARCH BY PHONE");
+        printf(C "|   3   | " M "  %-25s" C " |\n" Rst, "SEARCH BY EMAIL");
+        printf(C "---------------------------------------\n" Rst);
+        printf(B "Enter your choice: " Rst);
 
         //get a choice from user (scanf)
         scanf("%hd",&sel);
         printf("\n");
         if(sel>=1 && sel<=3) 
             break;
-        printf("Invalid input\n");
+        while(getc(stdin)!='\n');
+        printf(R "Invalid input!\n\n" Rst);
     }
     short index;
 
@@ -113,19 +111,19 @@ void editContact(AddressBook *addressBook){
     // Ask the field 1. name  2. phone  3. email
     //choice
     while(1){
-        printf("***************************************\n");    
-        printf("|              EDIT MODE              |\n");
-        printf("---------------------------------------\n");
-        printf("|   1   |   %-25s |\n","EDIT NAME ");
-        printf("|   2   |   %-25s |\n","EDIT PHONE");
-        printf("|   3   |   %-25s |\n","EDIT EMAIL");
-        printf("---------------------------------------\n"); 
-        printf("Enter your choice: ");
+        printf(C "***************************************\n" Rst);
+        printf(C "|" Y "              EDIT MODE              " C "|\n" Rst);
+        printf(C "---------------------------------------\n" Rst);
+        printf(C "|   1   | " M "  %-25s" C " |\n" Rst, "EDIT NAME ");
+        printf(C "|   2   | " M "  %-25s" C " |\n" Rst, "EDIT PHONE");
+        printf(C "|   3   | " M "  %-25s" C " |\n" Rst, "EDIT EMAIL");
+        printf(C "---------------------------------------\n" Rst);
+        printf(B "Enter your choice: " Rst);
         scanf("%hd",&choice);
 
         if(choice>=1 && choice<=3)
             break;
-        printf("Invalid Input\n");
+        printf(R "Invalid Input\n" Rst);
     }
     printf("\n");
 
@@ -142,7 +140,7 @@ void editContact(AddressBook *addressBook){
             break;
     }
 
-    printf("\nContact edited successfully!\n");
+    printf(G "\nContact edited successfully!\n" Rst);
     displayContact(addressBook, index);
 }
 
@@ -155,7 +153,7 @@ void deleteContact(AddressBook *addressBook){
         addressBook->contacts[i] = addressBook->contacts[i+1];
 
     addressBook->contactCount--;    
-    printf("Contact deleted successfully!\n");
+    printf(G "Contact deleted successfully!\n" Rst);
 }
 
 void saveAndExit(AddressBook *addressBook){
