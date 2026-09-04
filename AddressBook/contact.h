@@ -18,7 +18,6 @@ void createContact(AddressBook *addressBook);
 short searchContact(AddressBook *addressBook, char flag);
 void editContact(AddressBook *addressBook);
 void deleteContact(AddressBook *addressBook);
-
 void saveAndExit(AddressBook *addressBook);
 
 #endif
