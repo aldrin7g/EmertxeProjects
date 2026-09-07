@@ -8,9 +8,8 @@ int main()
     short choice;
     AddressBook addressBook;
     initialize(&addressBook); // Initialize the address book
-    
-    //addressBook.contactCount = 0;
 
+    // Main menu to handle user choices
     while(1) 
     {
         printf("\n\n" C "***************************************\n" Rst);

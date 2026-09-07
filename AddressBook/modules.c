@@ -5,6 +5,7 @@
 #include "contact.h"
 #include "modules.h"
 
+// Function to check if a character is alphanumeric
 status isalphanum(char c){ //check if alpha-numeric character or not
     if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
         return valid;
@@ -12,6 +13,7 @@ status isalphanum(char c){ //check if alpha-numeric character or not
     return invalid;
 }
 
+// Function to display the details of a contact at a given index
 void displayContact(AddressBook *addressBook, short index){
     printf(C "***************************************\n" Rst);
     printf(C "|" Y "           CONTACT DETAILS           " C "|\n" Rst);
@@ -23,6 +25,7 @@ void displayContact(AddressBook *addressBook, short index){
     printf(C "---------------------------------------\n\n" Rst); 
 }
 
+// Function to validate the name of a contact
 nameStatus validate_name(char *name){
     // LOOP till name[i] != '\0'
     //     check name[i] is not in the range of A to Z, a to z, ' ', '.'
@@ -37,6 +40,7 @@ nameStatus validate_name(char *name){
     return validName; // valid.
 }
 
+// Function to validate the phone number of a contact
 phoneStatus validate_phone(char *phone, AddressBook *addressBook){
     //check the length
          // != 10  ==> return 0 (invalid)
@@ -61,6 +65,7 @@ phoneStatus validate_phone(char *phone, AddressBook *addressBook){
     return validPhone; // valid;
 }
 
+// Function to validate the email of a contact
 emailStatus validate_email(char *str, AddressBook *addressBook){
      int atCount = 0, atPos = -1, dotPos = -1;
      int len = strlen(str);
@@ -98,6 +103,7 @@ emailStatus validate_email(char *str, AddressBook *addressBook){
      return validEmail;
 }
 
+// Function to input the name of a contact
 void inputName(char *name){
     while(1)
     {
@@ -112,6 +118,7 @@ void inputName(char *name){
     }
 }
 
+// Function to input the phone number of a contact
 void inputPhone(char *phone, AddressBook *addressBook){
     while(1)
     {
@@ -130,6 +137,7 @@ void inputPhone(char *phone, AddressBook *addressBook){
     }
 }
 
+// Function to input the email of a contact
 void inputEmail(char *email, AddressBook *addressBook){
     while(1){
         printf(B "Enter the Email : " Rst);
@@ -145,17 +153,17 @@ void inputEmail(char *email, AddressBook *addressBook){
     }
 }
 
+// Function to search contact based on name
 short search_by_name(AddressBook *addressBook, char flag){
     char str[20]; 
-    //Enter the name
-    //Get the name
+    // Get the name
     printf(B "Enter a Name to Search: \n" Rst);
     scanf(" %[^\n]",str);
     char count = 0;
     short ind;
     short* dup= malloc(sizeof(short) * 100);
 
-    //Loop till contactCount
+    // Loop till contactCount
     for(short i = 0; i<addressBook->contactCount; i++)
     {
         if(strcmp(str, addressBook->contacts[i].name) == 0)
@@ -166,23 +174,19 @@ short search_by_name(AddressBook *addressBook, char flag){
         }
     }
     printf("\n");
-    // count ==> 0 ==> No match ==> return -1;
+
     if(count==0){
         printf(R "No Record's Found!\n\n" Rst);
         return -1;
     }
 
-    // count ==> 1 ==> return ind
     else if(count==1){
         printf(G "Search Found at S.No.: %d!\n" Rst, ind + 1);
         displayContact(addressBook, ind);
         return ind;
     }
 
-    // count > 1 ==> return search_by_phone(addressBook);
     else if(count>1){ 
-        // printf("Multiple Names Found! Search by PhoneNo.\n\n");
-        // return search_by_phone(addressBook);
         if(flag==0){
             printf(R "Multiple Names Found!\n" Rst);
             for(char i = 0; i<count; i++){
@@ -212,19 +216,19 @@ short search_by_name(AddressBook *addressBook, char flag){
     }
 }
 
+// Function to search contact based on phone number
 short search_by_phone(AddressBook *addressBook){
     char str[11];
-    //Enter the phone
-    //Get the phone
+    // Get the phone
     printf(B "Enter a PhoneNo to Search: \n" Rst);
     scanf("%s",str);
     printf("\n");
-    //Loop till contactCount
+    // Loop till contactCount
     for(short ind = 0; ind<addressBook->contactCount; ind++)
     {
         if(strcmp(str, addressBook->contacts[ind].phone) == 0)
         {
-            //print the contact
+            // print the contact
             printf(G "Search Found at S.No.: %d!\n" Rst, ind + 1);
             displayContact(addressBook,ind);
             return ind;
@@ -236,18 +240,19 @@ short search_by_phone(AddressBook *addressBook){
     return -1;
 }
 
+// Function to search contact based on email
 short search_by_email(AddressBook *addressBook){
     char str[30];
-    //Enter the Email
+    // Get the email
     printf(B "Enter an Email to Search: \n" Rst);
     scanf("%s",str);
     printf("\n");
-    //Loop till contactCount
+    // Loop till contactCount
     for(short ind = 0; ind<addressBook->contactCount; ind++)
     {
         if(strcmp(str, addressBook->contacts[ind].email) == 0)
         {
-            //print the contact
+            // print the contact
             printf(G "Search Found at S.No.: %d!\n" Rst, ind + 1);
             displayContact(addressBook,ind);
             return ind;
@@ -259,6 +264,7 @@ short search_by_email(AddressBook *addressBook){
     return -1;
 }
 
+// Function to edit the name of a contact
 void edit_name(AddressBook *addressBook, short index){
     // get the name
     char name[20];
@@ -268,6 +274,7 @@ void edit_name(AddressBook *addressBook, short index){
     strcpy(addressBook->contacts[index].name, name);
 }
 
+// Function to edit the phone number of a contact
 void edit_phone(AddressBook *addressBook, short index){
     char mobile[11];
 
@@ -276,6 +283,7 @@ void edit_phone(AddressBook *addressBook, short index){
     strcpy(addressBook->contacts[index].phone, mobile);
 }
 
+// Function to edit the email of a contact
 void edit_mail(AddressBook *addressBook, short index){
     char email[30];
 

@@ -5,17 +5,18 @@
 #include "modules.h"
 #include "file.h"
 
+// Function to initialize the address book
 void initialize(AddressBook *addressBook) {
     addressBook->contactCount = 0;
     
-    // Load contacts from file during initialization (After files)
+    // Load contacts from file during initialization
     loadContactsFromFile(addressBook);
 }
 
+// Function to display the main menu
 void listContacts(AddressBook *addressBook){
     AddressBook *ad = addressBook;
-    // Sort contacts based on the chosen criteria
-    //buble sort
+    // Sort contacts using bubble sort based on name before displaying
     for(short i = 0; i < ad->contactCount-1; i++){
         for(short j = 0; j < ad->contactCount-i-1; j++){
             if(strcmp(ad->contacts[j].name, ad->contacts[j+1].name) > 0){
@@ -26,6 +27,7 @@ void listContacts(AddressBook *addressBook){
             }
         }
     }
+    // Display the contacts in a formatted table
     printf(C "-----------------------------------------------------------------------------\n" Rst);
     printf(C "|" Y "                               ADDRESS BOOK                                " C "|\n" Rst);
     printf(C "*****************************************************************************\n" Rst);
@@ -40,10 +42,8 @@ void listContacts(AddressBook *addressBook){
     printf(C "-----------------------------------------------------------------------------\n" Rst);
 }
 
+// Function to create a new contact
 void createContact(AddressBook *addressBook){
-	/* Define the logic to create a Contacts */
-
-    // sizeof(addressBook);
     char name[20];
     inputName(name);
 
@@ -63,11 +63,12 @@ void createContact(AddressBook *addressBook){
     addressBook->contactCount++;
 }
 
+// Function to search for a contact based on the chosen criteria
 short searchContact(AddressBook *addressBook, char flag){
     short sel= 0;
     while(1)
     {
-        //promt (printf)  
+        // Display the search menu 
         printf(C "***************************************\n" Rst);
         printf(C "|" Y "             SEARCH MODE             " C "|\n" Rst);
         printf(C "---------------------------------------\n" Rst);
@@ -77,7 +78,7 @@ short searchContact(AddressBook *addressBook, char flag){
         printf(C "---------------------------------------\n" Rst);
         printf(B "Enter your choice: " Rst);
 
-        //get a choice from user (scanf)
+        // Get user input for the search criteria
         scanf("%hd",&sel);
         printf("\n");
         if(sel>=1 && sel<=3) 
@@ -102,14 +103,13 @@ short searchContact(AddressBook *addressBook, char flag){
     return index;
 }
 
+// Function to edit an existing contact
 void editContact(AddressBook *addressBook){
     short choice;
-	/* Define the logic for Editcontact */
     short index = searchContact(addressBook, 1);
-    if(index<0) return;
+    if(index<0) return; // If the contact is not found, return
 
-    // Ask the field 1. name  2. phone  3. email
-    //choice
+    // Display the edit menu and get user input for the field to edit
     while(1){
         printf(C "***************************************\n" Rst);
         printf(C "|" Y "              EDIT MODE              " C "|\n" Rst);
@@ -144,11 +144,12 @@ void editContact(AddressBook *addressBook){
     displayContact(addressBook, index);
 }
 
+// Function to delete an existing contact
 void deleteContact(AddressBook *addressBook){
-	/* Define the logic for deletecontact */
     short index = searchContact(addressBook, 1);
-    if(index<0) return;
+    if(index<0) return; // If the contact is not found, return
 
+    // Shift all contacts after the deleted contact to the left
     for(short i = index; i<addressBook->contactCount-1; i++)
         addressBook->contacts[i] = addressBook->contacts[i+1];
 
@@ -156,7 +157,8 @@ void deleteContact(AddressBook *addressBook){
     printf(G "Contact deleted successfully!\n" Rst);
 }
 
+// Function to save contacts to file and exit the program
 void saveAndExit(AddressBook *addressBook){
-    saveContactsToFile(addressBook); // Save contacts to file
+    saveContactsToFile(addressBook);
     exit(0);
 }
