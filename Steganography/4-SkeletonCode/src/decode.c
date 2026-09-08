@@ -78,7 +78,7 @@ char decode_byte_from_lsb(char* image_buffer){
     return byte;
 }
 
-Status check_magic_string(const char* magic_string, DecodeInfo* decInfo){
+Status check_magic_string(DecodeInfo* decInfo){
     printf(I "INFO: Checking Magic String Signature\n" Rst);
     // Seek to 54th byte
     char magic[MAGIC_STRING_LEN + 1];
@@ -153,7 +153,7 @@ Status decode_secret_file_data(DecodeInfo* decInfo){
 Status do_decoding(DecodeInfo* decInfo){
     if(open_files_decode(decInfo) == failure)
         return failure;
-    if(check_magic_string(MAGIC_STRING, decInfo) == failure)
+    if(check_magic_string(decInfo) == failure)
         return failure;
     if(decode_secret_file_extn(decInfo) == failure)
         return failure;

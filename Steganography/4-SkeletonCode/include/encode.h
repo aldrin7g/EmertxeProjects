@@ -58,7 +58,7 @@ uint get_file_size(EncodeInfo *encInfo);
 Status copy_bmp_header(EncodeInfo *EncodeInfo);
 
 /* Store Magic String */
-Status encode_magic_string(const char *magic_string, EncodeInfo *encInfo);
+Status encode_magic_string(EncodeInfo *encInfo);
 
 /* Encode secret file extenstion */
 Status encode_secret_file_extn(EncodeInfo *encInfo);

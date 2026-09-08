@@ -36,7 +36,7 @@ Status decode_data_from_image(char* bytes, int size, FILE* fptr_stego);
 char decode_byte_from_lsb(char* image_buffer);
 
 /* Check if the magic string is present in the stego image */
-Status check_magic_string(const char* magic_string, DecodeInfo* decInfo);
+Status check_magic_string(DecodeInfo* decInfo);
 
 /* Decode secret file extension */
 Status decode_secret_file_extn(DecodeInfo* decInfo);

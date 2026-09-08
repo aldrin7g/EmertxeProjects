@@ -138,7 +138,7 @@ Status check_capacity(EncodeInfo* encInfo){
     int secret_file_data = sizeof(char) * encInfo->size_secret_file; //(Size to store the secret file data in the image, stored as char array)
 
     printf(I "INFO: Checking for %s capacity to handle %s\n" Rst, encInfo->stego_image_fname, encInfo->secret_fname);
-    if(encInfo->image_capacity < (magic_string_size + secret_extn_count + secret_extn_size + secret_data_count + secret_file_data)*8){
+    if(encInfo->image_capacity < (uint)(magic_string_size + secret_extn_count + secret_extn_size + secret_data_count + secret_file_data)*8){
         fprintf(stderr, E "ERROR: Insufficient image capacity\n" Rst);
         return failure;
     }
@@ -176,7 +176,7 @@ void encode_byte_to_lsb(char data, char *image_buffer){
         image_buffer[i] = (image_buffer[i] & 0xFE) | ((data>>i) & 1);
 }
 
-Status encode_magic_string(const char* magic_string, EncodeInfo* encInfo){
+Status encode_magic_string(EncodeInfo* encInfo){
     printf(I "INFO: Encoding Magic String Signature\n" Rst);
     // Seek to 0th byte
     fseek(encInfo->fptr_src_image, 54, SEEK_SET);
@@ -272,7 +272,7 @@ Status do_encoding(EncodeInfo *encInfo){
         return failure;
     if(copy_bmp_header(encInfo) == failure)
         return failure;
-    if(encode_magic_string(MAGIC_STRING, encInfo) == failure)
+    if(encode_magic_string(encInfo) == failure)
         return failure;
     if(encode_secret_extn_size(encInfo) == failure)
         return failure;
