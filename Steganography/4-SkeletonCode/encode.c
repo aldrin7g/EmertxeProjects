@@ -3,7 +3,6 @@
 /* Function Definitions */
 
 Status read_and_validate_encode_args(char* argv[], EncodeInfo* encInfo){
-    printf(I "INFO: Validating Encode Arguments\n" Rst);
     // Get the source image file name and extn
     if(!get_extn(encInfo->extn_src_file, argv[2])){
         fprintf(stderr,E "Error: Invalid Source file Name \"%s\"!\n" Rst, argv[2]);
@@ -36,7 +35,7 @@ Status read_and_validate_encode_args(char* argv[], EncodeInfo* encInfo){
         strcpy(encInfo->stego_image_fname, "stego_img.bmp");
         strcpy(encInfo->extn_stego_file,".bmp");
     }
-    printf(S "INFO: Done\n" Rst);
+    printf(I "INFO: Encoding Arguments Validated Successfully\n" Rst);
     return success;
 }
 /* 

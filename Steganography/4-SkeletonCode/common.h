@@ -7,9 +7,11 @@
 #include "types.h"
 
 #define E   "\033[31m"          // Errors
-#define O   "\033[38;5;117m"    // Operations
-#define I   "\033[32m"          // Info
-#define S   "\033[33m"          // Success
+#define O   "\033[33m"          // Operations
+#define D   "\033[34m"          // Debug
+#define I   "\033[95m"          // Info
+#define F   "\033[37m"          // Filenames
+#define S   "\033[32m"          // Success
 #define Rst "\033[0m"           // Reset
 
 #define MAX_FILE_SUFFIX 5

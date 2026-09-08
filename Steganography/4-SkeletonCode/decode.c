@@ -2,7 +2,7 @@
 #include "decode.h"
 
 Status read_and_validate_decode_args(char* argv[], DecodeInfo* decInfo){
-    printf(I "## Decoding Procedure Started ##\n" Rst);
+    printf(O "## Decoding Procedure Started ##\n" Rst);
     printf(I "INFO: Validating Decode Arguments\n" Rst);
     // Get the source image file name and extn
     if(!get_extn(decInfo->extn_stego_file, argv[2])){
@@ -18,9 +18,9 @@ Status read_and_validate_decode_args(char* argv[], DecodeInfo* decInfo){
     }
     else{
         printf(I "INFO: Output filename not mentioned, Creating \"decoded.txt\" as default\n" Rst);
-        strcpy(decInfo->secret_fname, "decoded");
+        strcpy(decInfo->secret_fname, "decoded.txt");
     }
-    printf(I "INFO: Done\n" Rst);
+    printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -53,7 +53,7 @@ Status open_files_decode(DecodeInfo* decInfo){
     printf(I "INFO: Opened Secret File: %s\n" Rst, decInfo->secret_fname);
 
     // No failure return e_success
-    printf(S "Done\n" Rst);
+    printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -90,7 +90,7 @@ Status check_magic_string(const char* magic_string, DecodeInfo* decInfo){
     magic[MAGIC_STRING_LEN] = '\0';
 
     if(!strcmp(magic, MAGIC_STRING)){
-        printf(I "INFO: Done. Magic String Matched!\n" Rst);
+        printf(S "INFO: Done. Magic String Matched!\n" Rst);
         return success;
     }
     else{
@@ -108,7 +108,7 @@ Status decode_secret_file_extn(DecodeInfo* decInfo){
         fprintf(stderr, E "ERROR: Decoding Secret File Extension Size failed\n" Rst);
         return failure;
     }
-    printf(S "Done\n" Rst);
+    printf(S "INFO: Done\n" Rst);
 
     char extn[extn_size+1];
     extn[extn_size] = '\0';
@@ -122,7 +122,7 @@ Status decode_secret_file_extn(DecodeInfo* decInfo){
         strcpy(decInfo->extn_secret_file, extn);
         strcat(decInfo->secret_fname, decInfo->extn_secret_file);
     }
-    printf(S "Done\n" Rst);
+    printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -134,7 +134,7 @@ Status decode_secret_file_size(DecodeInfo* decInfo){
         return failure;
     }
     memcpy(&decInfo->size_secret_file, size, sizeof(int));
-    printf(I "INFO: Done\n" Rst);
+    printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -146,7 +146,7 @@ Status decode_secret_file_data(DecodeInfo* decInfo){
         return failure;
     }
     fwrite(data, sizeof(char), decInfo->size_secret_file, decInfo->fptr_secret);
-    printf(I "INFO: Done\n" Rst);
+    printf(S "INFO: Done\n" Rst);
     return success;
 }
 
