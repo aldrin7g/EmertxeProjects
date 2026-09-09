@@ -2,6 +2,7 @@
 #include "encode.h"
 /* Function Definitions */
 
+// Function to read and validate encode arguments
 Status read_and_validate_encode_args(char* argv[], EncodeInfo* encInfo){
     // Get the source image file name and extn
     if(!get_extn(encInfo->extn_src_file, argv[2])){
@@ -118,6 +119,7 @@ uint get_image_size_for_bmp(EncodeInfo* encInfo){
     return encInfo->image_capacity;
 }
 
+// Function to get the size of the secret file
 uint get_file_size(EncodeInfo* encInfo){
     printf(I "INFO: Checking for %s size\n" Rst, encInfo->secret_fname);
     fseek(encInfo->fptr_secret,0,SEEK_END);
@@ -127,6 +129,7 @@ uint get_file_size(EncodeInfo* encInfo){
     printf(S "INFO: Done. Not Empty\n" Rst);
 }
 
+// Function to check if the image has enough capacity to hold the secret data
 Status check_capacity(EncodeInfo* encInfo){
     get_file_size(encInfo);
     get_image_size_for_bmp(encInfo);
@@ -146,6 +149,7 @@ Status check_capacity(EncodeInfo* encInfo){
     return success;
 }
 
+// Function to copy the BMP header from source image to stego image
 Status copy_bmp_header(EncodeInfo* encInfo){
     printf(I "INFO: Copying Image Header\n" Rst);
     char header[54];
@@ -157,6 +161,7 @@ Status copy_bmp_header(EncodeInfo* encInfo){
     return success;
 }
 
+// Function to encode data into the image
 Status encode_data_to_image(char *data, int size, FILE *fptr_src_image, FILE *fptr_stego_image){
     int iter = 0;
     while(iter < size){
@@ -171,11 +176,13 @@ Status encode_data_to_image(char *data, int size, FILE *fptr_src_image, FILE *fp
     return success;
 }
 
+// Function to encode a byte into the lsb of 8 bytes
 void encode_byte_to_lsb(char data, char *image_buffer){
     for(int i=0; i<8; i++)
         image_buffer[i] = (image_buffer[i] & 0xFE) | ((data>>i) & 1);
 }
 
+// Function to encode the magic string into the image
 Status encode_magic_string(EncodeInfo* encInfo){
     printf(I "INFO: Encoding Magic String Signature\n" Rst);
     // Seek to 0th byte
@@ -189,6 +196,7 @@ Status encode_magic_string(EncodeInfo* encInfo){
     return success;
 }
 
+// Function to encode the size of the secret file extension into the image
 Status encode_secret_extn_size(EncodeInfo* encInfo){
     printf(I "INFO: Encoding Size Of %s File Extension\n" Rst, encInfo->extn_secret_file);
     char extn_size = strlen(encInfo->extn_secret_file);
@@ -200,6 +208,7 @@ Status encode_secret_extn_size(EncodeInfo* encInfo){
     return success;    
 }
 
+// Function to encode the size of the secret file into the image
 Status encode_secret_file_extn(EncodeInfo* encInfo){
     printf(I "INFO: Encoding %s File Extension\n" Rst, encInfo->extn_secret_file);
     if(!encode_data_to_image(encInfo->extn_secret_file, strlen(encInfo->extn_secret_file), encInfo->fptr_src_image, encInfo->fptr_stego_image)){
@@ -210,6 +219,7 @@ Status encode_secret_file_extn(EncodeInfo* encInfo){
     return success;
 }
 
+// Function to encode the size of the secret file into the image
 Status encode_secret_file_size(EncodeInfo* encInfo){
     printf(I "INFO: Encoding %s File Size\n" Rst, encInfo->secret_fname);
     char size[sizeof(int)]; memcpy(size, &encInfo->size_secret_file, sizeof(int));
@@ -221,6 +231,7 @@ Status encode_secret_file_size(EncodeInfo* encInfo){
     return success;
 }
 
+// Function to encode the secret file data into the image
 Status encode_secret_file_data(EncodeInfo* encInfo){
     printf(I "INFO: Encoding %s File Data\n" Rst, encInfo->secret_fname);
     char *data = malloc(sizeof(char) * encInfo->size_secret_file);
@@ -243,6 +254,7 @@ Status encode_secret_file_data(EncodeInfo* encInfo){
     return success;
 }
 
+// Function to copy the remaining image data from source image to stego image
 Status copy_remaining_img_data(EncodeInfo* encInfo){
     printf(I "INFO: Copying Remaining Image Data\n" Rst);
     unsigned char buffer[BUFFER_SIZE];
@@ -263,6 +275,7 @@ Status copy_remaining_img_data(EncodeInfo* encInfo){
     return success;
 }
 
+// Function to perform the encoding process
 Status do_encoding(EncodeInfo *encInfo){
     if(open_files_encode(encInfo) == failure)
         return failure;

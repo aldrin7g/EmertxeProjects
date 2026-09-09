@@ -1,5 +1,6 @@
 #include "common.h"
 
+// Function to check the operation type based on command line arguments
 OperationType check_operation_type(char* argv[]){
     if(argv[1]==NULL)
         return unsupported;
@@ -11,6 +12,7 @@ OperationType check_operation_type(char* argv[]){
         return unsupported;
 }
 
+// Function to get the file extension from a filename
 Status get_extn(char* result, char* filename){
     if(filename == NULL || result == NULL) 
         return failure;

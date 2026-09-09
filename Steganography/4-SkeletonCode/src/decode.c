@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "decode.h"
 
+// Function to read and validate decode arguments
 Status read_and_validate_decode_args(char* argv[], DecodeInfo* decInfo){
     printf(O "## Decoding Procedure Started ##\n" Rst);
     // Get the source image file name and extn
@@ -23,6 +24,7 @@ Status read_and_validate_decode_args(char* argv[], DecodeInfo* decInfo){
     return success;
 }
 
+// Function to decode data from image
 Status open_stego_file(DecodeInfo* decInfo){
     // Stego Image file
     char* output_path = malloc(sizeof(char) * MAX_FILE_PATH);
@@ -39,6 +41,7 @@ Status open_stego_file(DecodeInfo* decInfo){
     return success;
 }
 
+// Function to open the secret file for writing
 Status open_secret_file(DecodeInfo* decInfo){
     // Secret file
     char* output_path = malloc(sizeof(char) * MAX_FILE_PATH);
@@ -55,6 +58,8 @@ Status open_secret_file(DecodeInfo* decInfo){
     return success;
 }
 
+
+// Function to decode data from image
 Status decode_data_from_image(char* bytes, int size, FILE* fptr_stego){
     char image_buffer[8];
     int iter = 0;
@@ -68,6 +73,7 @@ Status decode_data_from_image(char* bytes, int size, FILE* fptr_stego){
     return success;
 }
 
+// Function to decode a byte from the lsb of 8 bytes
 char decode_byte_from_lsb(char* image_buffer){
     unsigned char byte = 0;
     for(int i=0; i<8; i++){
@@ -76,6 +82,7 @@ char decode_byte_from_lsb(char* image_buffer){
     return byte;
 }
 
+// Function to check the magic string signature in the stego image
 Status check_magic_string(DecodeInfo* decInfo){
     printf(I "INFO: Checking Magic String Signature\n" Rst);
     // Seek to 54th byte
@@ -97,6 +104,7 @@ Status check_magic_string(DecodeInfo* decInfo){
     }
 }
 
+// Function to decode the secret file extension from the stego image
 Status decode_secret_file_extn(DecodeInfo* decInfo){
     // Decode the size of the secret file extension
     char extn_size;
@@ -123,6 +131,7 @@ Status decode_secret_file_extn(DecodeInfo* decInfo){
     return success;
 }
 
+// Function to decode the secret file size from the stego image
 Status decode_secret_file_size(DecodeInfo* decInfo){
     char size[sizeof(int)];
     if(!decode_data_from_image(size, sizeof(int), decInfo->fptr_stego_image)){
@@ -134,6 +143,7 @@ Status decode_secret_file_size(DecodeInfo* decInfo){
     return success;
 }
 
+// Function to decode the secret file data from the stego image
 Status decode_secret_file_data(DecodeInfo* decInfo){
     char data[decInfo->size_secret_file];
     if(!decode_data_from_image(data, decInfo->size_secret_file, decInfo->fptr_stego_image)){
@@ -145,6 +155,7 @@ Status decode_secret_file_data(DecodeInfo* decInfo){
     return success;
 }
 
+// Function to perform the decoding process
 Status do_decoding(DecodeInfo* decInfo){
     if(open_stego_file(decInfo) == failure)
         return failure;
