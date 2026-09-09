@@ -27,7 +27,8 @@ typedef struct{
 Status read_and_validate_decode_args(char* argv[], DecodeInfo* decInfo);
 
 /* Open required files */
-Status open_files_decode(DecodeInfo* decInfo);
+Status open_stego_file(DecodeInfo* decInfo);
+Status open_secret_file(DecodeInfo* decInfo);
 
 /* Decode data from stego image */
 Status decode_data_from_image(char* bytes, int size, FILE* fptr_stego);

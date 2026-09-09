@@ -24,8 +24,7 @@ Status read_and_validate_decode_args(char* argv[], DecodeInfo* decInfo){
     return success;
 }
 
-Status open_files_decode(DecodeInfo* decInfo){
-    printf(I "INFO: Opening required files\n" Rst);
+Status open_stego_file(DecodeInfo* decInfo){
     // Stego Image file
     char* output_path = malloc(sizeof(char) * MAX_FILE_PATH);
     snprintf(output_path, MAX_FILE_PATH, "%s%s", base_path_output, decInfo->stego_image_fname);
@@ -39,8 +38,14 @@ Status open_files_decode(DecodeInfo* decInfo){
     free(output_path);
     printf(I "INFO: Opened Stego Image File: %s\n" Rst, decInfo->stego_image_fname);
 
+    // No failure return success
+    printf(S "INFO: Done\n" Rst);
+    return success;
+}
+
+Status open_secret_file(DecodeInfo* decInfo){
     // Secret file
-    output_path = malloc(sizeof(char) * MAX_FILE_PATH);
+    char* output_path = malloc(sizeof(char) * MAX_FILE_PATH);
     snprintf(output_path, MAX_FILE_PATH, "%s%s", base_path_output, decInfo->secret_fname);
     decInfo->fptr_secret = fopen(output_path, "w");
     // Do Error handling
@@ -52,7 +57,7 @@ Status open_files_decode(DecodeInfo* decInfo){
     free(output_path);
     printf(I "INFO: Opened Secret File: %s\n" Rst, decInfo->secret_fname);
 
-    // No failure return e_success
+    // No failure return success
     printf(S "INFO: Done\n" Rst);
     return success;
 }
@@ -118,10 +123,15 @@ Status decode_secret_file_extn(DecodeInfo* decInfo){
         fprintf(stderr, E "ERROR: Decoding Secret File Extension failed\n" Rst);
         return failure;
     }
+    printf("%s\n%s\n", extn, decInfo->extn_secret_file);
     if(strcmp(extn, decInfo->extn_secret_file)){
         strcpy(decInfo->extn_secret_file, extn);
+        char* dot = strchr(decInfo->secret_fname, '.');
+        *dot = '\0';
         strcat(decInfo->secret_fname, decInfo->extn_secret_file);
     }
+    open_secret_file(decInfo);
+    printf("%s\n", decInfo->secret_fname);
     printf(S "INFO: Done\n" Rst);
     return success;
 }
@@ -151,7 +161,7 @@ Status decode_secret_file_data(DecodeInfo* decInfo){
 }
 
 Status do_decoding(DecodeInfo* decInfo){
-    if(open_files_decode(decInfo) == failure)
+    if(open_stego_file(decInfo) == failure)
         return failure;
     if(check_magic_string(decInfo) == failure)
         return failure;

@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     OperationType input = check_operation_type(argv);
 
-    printf(I "INFO: Operation Type: %s\n" Rst, input == encode ? "Encode" : "Decode");
+    printf(I "INFO: Operation Type: %s\n" Rst, input == unsupported ? "<Unknown>" : input == encode ? "Encode" : "Decode");
 
     if(input == encode){
         // do encode
