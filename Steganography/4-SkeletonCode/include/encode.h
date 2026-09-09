@@ -52,7 +52,7 @@ Status check_capacity(EncodeInfo *encInfo);
 uint get_image_size_for_bmp(EncodeInfo *encInfo);
 
 /* Get file size */
-uint get_file_size(EncodeInfo *encInfo);
+Status get_file_size(EncodeInfo *encInfo);
 
 /* Copy bmp image header */
 Status copy_bmp_header(EncodeInfo *EncodeInfo);

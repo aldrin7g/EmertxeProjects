@@ -4,6 +4,7 @@
 
 // Function to read and validate encode arguments
 Status read_and_validate_encode_args(char* argv[], EncodeInfo* encInfo){
+    printf(O "## Encoding Procedure Started ##\n" Rst);
     // Get the source image file name and extn
     if(!get_extn(encInfo->extn_src_file, argv[2])){
         fprintf(stderr,E "Error: Invalid Source file Name \"%s\"!\n" Rst, argv[2]);
@@ -36,7 +37,7 @@ Status read_and_validate_encode_args(char* argv[], EncodeInfo* encInfo){
         strcpy(encInfo->stego_image_fname, "stego_img.bmp");
         strcpy(encInfo->extn_stego_file,".bmp");
     }
-    printf(I "INFO: Encoding Arguments Validated Successfully\n" Rst);
+    printf(S "INFO: Encoding Arguments Validation Success\n" Rst);
     return success;
 }
 /* 
@@ -59,7 +60,7 @@ Status open_files_encode(EncodeInfo* encInfo){
     	return failure;
     }
     free(input_path);
-    printf(I "INFO: Opened Source Image File: %s\n" Rst, encInfo->src_image_fname);
+    printf(S "INFO: Opened Source Image File: %s\n" Rst, encInfo->src_image_fname);
 
     // Secret file
     input_path = malloc(sizeof(char) * MAX_FILE_PATH);
@@ -72,7 +73,7 @@ Status open_files_encode(EncodeInfo* encInfo){
     	return failure;
     }
     free(input_path);
-    printf(I "INFO: Opened Secret File: %s\n" Rst, encInfo->secret_fname);
+    printf(S "INFO: Opened Secret File: %s\n" Rst, encInfo->secret_fname);
 
     // Stego Image file
     char* output_path = malloc(sizeof(char) * MAX_FILE_PATH);
@@ -85,10 +86,7 @@ Status open_files_encode(EncodeInfo* encInfo){
     	return failure;
     }
     free(output_path);
-    printf(I "INFO: Opened Stego Image File: %s\n" Rst, encInfo->stego_image_fname);
-
-    // No failure return e_success
-    printf(S "INFO: Done\n" Rst);
+    printf(S "INFO: Opened Stego Image File: %s\n" Rst, encInfo->stego_image_fname);
     return success;
 }
 
@@ -120,18 +118,24 @@ uint get_image_size_for_bmp(EncodeInfo* encInfo){
 }
 
 // Function to get the size of the secret file
-uint get_file_size(EncodeInfo* encInfo){
+Status get_file_size(EncodeInfo* encInfo){
     printf(I "INFO: Checking for %s size\n" Rst, encInfo->secret_fname);
     fseek(encInfo->fptr_secret,0,SEEK_END);
     encInfo->size_secret_file = ftell(encInfo->fptr_secret);
     rewind(encInfo->fptr_secret);
-    return encInfo->size_secret_file;
+    if(encInfo->size_secret_file == 0){
+        fprintf(stderr, E "ERROR: Secret file is empty\n" Rst);
+        return failure;
+    }
     printf(S "INFO: Done. Not Empty\n" Rst);
+    return success;
 }
 
 // Function to check if the image has enough capacity to hold the secret data
 Status check_capacity(EncodeInfo* encInfo){
-    get_file_size(encInfo);
+    if(get_file_size(encInfo) == failure){
+        return failure;
+    }
     get_image_size_for_bmp(encInfo);
 
     char magic_string_size = strlen(MAGIC_STRING);
@@ -157,7 +161,7 @@ Status copy_bmp_header(EncodeInfo* encInfo){
         return failure;
     if(!fwrite(header, sizeof(char), 54, encInfo->fptr_stego_image))
         return failure;
-    printf(S "INFO: Done\n" Rst);
+    //printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -192,30 +196,30 @@ Status encode_magic_string(EncodeInfo* encInfo){
         fprintf(stderr, E "ERROR: Encoding Magic String failed\n" Rst);
         return failure;
     }
-    printf(S "INFO: Done\n" Rst);
+    //printf(S "INFO: Done\n" Rst);
     return success;
 }
 
 // Function to encode the size of the secret file extension into the image
 Status encode_secret_extn_size(EncodeInfo* encInfo){
-    printf(I "INFO: Encoding Size Of %s File Extension\n" Rst, encInfo->extn_secret_file);
+    printf(I "INFO: Encoding Size of \"%s\" File Extension\n" Rst, encInfo->extn_secret_file);
     char extn_size = strlen(encInfo->extn_secret_file);
     if(!encode_data_to_image(&extn_size, sizeof(char), encInfo->fptr_src_image, encInfo->fptr_stego_image)){
         fprintf(stderr, E "ERROR: Encoding Size Of Secret File Extension failed\n" Rst);
         return failure;
     }
-    printf(S "INFO: Done\n" Rst);
+    //printf(S "INFO: Done\n" Rst);
     return success;    
 }
 
 // Function to encode the size of the secret file into the image
 Status encode_secret_file_extn(EncodeInfo* encInfo){
-    printf(I "INFO: Encoding %s File Extension\n" Rst, encInfo->extn_secret_file);
+    printf(I "INFO: Encoding \"%s\" File Extension\n" Rst, encInfo->extn_secret_file);
     if(!encode_data_to_image(encInfo->extn_secret_file, strlen(encInfo->extn_secret_file), encInfo->fptr_src_image, encInfo->fptr_stego_image)){
         fprintf(stderr, E "ERROR: Encoding Secret File Extension failed\n" Rst);
         return failure;
     }
-    printf(S "INFO: Done\n" Rst);
+    //printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -227,7 +231,7 @@ Status encode_secret_file_size(EncodeInfo* encInfo){
         fprintf(stderr, E "ERROR: Encoding Secret File Size failed\n" Rst);
         return failure;
     }
-    printf(S "INFO: Done\n" Rst);
+    //printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -250,7 +254,7 @@ Status encode_secret_file_data(EncodeInfo* encInfo){
         return failure;
     }
     free(data);
-    printf(S "INFO: Done\n" Rst);
+    //printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -271,7 +275,7 @@ Status copy_remaining_img_data(EncodeInfo* encInfo){
         fprintf(stderr, E "ERROR: Error reading remaining image data\n" Rst);
         return failure;
     }
-    printf(S "INFO: Done\n" Rst);
+    //printf(S "INFO: Done\n" Rst);
     return success;
 }
 
@@ -279,8 +283,6 @@ Status copy_remaining_img_data(EncodeInfo* encInfo){
 Status do_encoding(EncodeInfo *encInfo){
     if(open_files_encode(encInfo) == failure)
         return failure;
-
-    printf(O "## Encoding Process Started ##\n" Rst);
     if(check_capacity(encInfo) == failure)
         return failure;
     if(copy_bmp_header(encInfo) == failure)
@@ -297,5 +299,6 @@ Status do_encoding(EncodeInfo *encInfo){
         return failure;
     if(copy_remaining_img_data(encInfo) == failure)
         return failure;
+    printf(S "INFO: Encoding Process Completed Successfully🤩\n" Rst);
     return success;
 }
