@@ -25,6 +25,11 @@ int main()
         printf(C "---------------------------------------\n" Rst);
         printf(B"Enter your choice: "Rst);
         scanf("%hd", &choice);
+        if(choice<1 || choice>7) {
+            printf(R "Invalid input! Please enter a number between 1 and 7.\n" Rst);
+            while(getc(stdin)!='\n'); // Clear the input buffer
+            continue;
+        }
         printf("\n");
         
         switch (choice) 
@@ -51,9 +56,6 @@ int main()
             case 7:
                 printf(G "Exiting without Saving!\n\n" Rst);
                 exit(0);
-            
-            default:
-                printf(R "Invalid choice. Please try again.\n" Rst);
         }
     }
     
