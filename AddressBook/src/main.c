@@ -27,7 +27,7 @@ int main()
         scanf("%hd", &choice);
         if(choice<1 || choice>7) {
             printf(R "Invalid input! Please enter a number between 1 and 7.\n" Rst);
-            while(getc(stdin)!='\n'); // Clear the input buffer
+            while(getc(stdin)!='\n'); 
             continue;
         }
         printf("\n");

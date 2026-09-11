@@ -214,6 +214,7 @@ short search_by_name(AddressBook *addressBook, char flag){
             }
         }
     }
+    return -1;
 }
 
 // Function to search contact based on phone number
