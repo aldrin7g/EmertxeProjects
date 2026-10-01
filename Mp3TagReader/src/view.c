@@ -107,7 +107,6 @@ Status read_mp3_tags(Mp3Tag* tags, FileInfo* file){
 
 Status display_mp3_tags(Mp3Tag *tags)
 {
-    printf("\n");
     printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
     printf("%s        |                         MP3 TAG READER                             |%s\n", O, RST);
     printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
