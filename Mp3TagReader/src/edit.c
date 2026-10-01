@@ -27,7 +27,6 @@ Status check_mp3_tag(const char* edit_tag, FileInfo* file){
     if(strcmp(tag, edit_tag) == 0)
         return success;
 
-    fprintf(stderr, E"ERROR: Tag \"%s\" not found in the MP3 file\n"RST, edit_tag);
     return failure;
 }
 
@@ -134,7 +133,7 @@ Status edit_mp3_tag(const char* new_data, const char* edit_tag, FileInfo* file){
 
     remove(file->fname);
     if(rename("temp.mp3", file->fname) != 0){
-        fprintf(stderr, "ERROR: Unable to rename temporary file\n");
+        fprintf(stderr, E"ERROR: Unable to rename temporary file\n"RST);
         return failure;
     }
     return success;

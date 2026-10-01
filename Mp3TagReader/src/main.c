@@ -13,13 +13,9 @@ int main(int argc, char** argv){
     }
     
     Type op_type = chk_operation_type(argv[1]);
-    if(op_type==invalid){
+    if(op_type==invalid || op_type==help){
         display_help();
         return 1;
-    }
-    else if(op_type==help){
-        display_help();
-        return 0;
     }
 
     if(validate_mp3_file(argv[2], &file)==failure){
@@ -27,16 +23,25 @@ int main(int argc, char** argv){
         return 1;
     }
     if(op_type==view){
-        read_mp3_tags(&tags, &file);
+        if(read_mp3_tags(&tags, &file)==failure){
+            fprintf(stderr, E"ERROR: Failed to read MP3 tags\n"RST);
+            return 1;
+        }
         display_mp3_tags(&tags);
     }
     else if(op_type==edit){
         const char* edit_tag = edit_op_arg_check(argv[3]);
         if(edit_tag==NULL){
-            fprintf(stderr, "ERROR: Invalid edit operation\n");
+            fprintf(stderr, E"ERROR: Invalid edit operation\n"RST);
             return 1;
         }
-        edit_mp3_tag(argv[4], edit_tag, &file);
+        if(edit_mp3_tag(argv[4], edit_tag, &file)==failure){
+            fprintf(stderr, E"ERROR: Failed to edit MP3 tag\n"RST);
+            return 1;
+        }
+        else{
+            printf("%sMP3 tag data updated successfully!%s\n"RST, Y, RST);
+        }
     }
     return 0;
 }
