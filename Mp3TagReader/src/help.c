@@ -1,19 +1,17 @@
 #include "help.h"
+#include "common.h"
 
 void display_help(){
-    printf("--------------------------------\n");
-    printf("        MP3 TAG READER\n");
-    printf("--------------------------------\n");
-    printf("Usage:\n");
-    printf("  mp3tag -v <file.mp3>                      View the tags of the specified mp3 file\n");
-    printf("  mp3tag -e <file.mp3> <tag> <new_value>    Edit the specified tag of the mp3 file\n");
-    printf("  mp3tag -h                                 Display this help message\n");
-    printf("\n");
-    printf("Tags:\n");
-    printf("  -y   Year\n");
-    printf("  -t   Title\n");
-    printf("  -A   Artist\n");
-    printf("  -a   Album\n");
-    printf("  -g   Genre\n");
-    printf("  -c   Comment\n");
+    printf("%s        +-------------------------------------------------------+%s\n", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, Y, "                    MP3 TAG READER", O, RST);
+    printf("%s        +-------------------------------------------------------+%s\n", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, M, "  USAGE", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, B, "  -v <file.mp3>                         View MP3 tags", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, B, "  -e <file.mp3> <tag> <new_value>       Edit MP3 tag", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, B, "  -h                                    Display help", O, RST);
+    printf("%s        +-------------------------------------------------------+%s\n", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, M, "  AVAILABLE TAGS", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, B, "  -y  Year          -t  Title          -A  Artist", O, RST);
+    printf("%s        |%s%-55s%s|%s\n", O, B, "  -a  Album         -g  Genre          -c  Comment", O, RST);
+    printf("%s        +-------------------------------------------------------+%s\n", O, RST);
 }

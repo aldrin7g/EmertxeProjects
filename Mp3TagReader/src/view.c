@@ -4,7 +4,10 @@ Status read_mp3_info_size(FileInfo* file){
     // Read Tag Size
     byte size[4];
     fseek(file->fp, 6, SEEK_SET);
-    fread(size, sizeof(byte), 4, file->fp);
+    if(fread(size, sizeof(byte), 4, file->fp) != 4){
+        fprintf(stderr, E"ERROR: Failed to read tag size\n"RST);
+        return failure;
+    }
     int tag_size =
           ((size[0] & 0x7F) << 21)
         | ((size[1] & 0x7F) << 14)
@@ -52,8 +55,10 @@ Status skip_unknown_frame(char* tag, uint frame_size, FileInfo* file){
 Status read_mp3_frame(Mp3Tag* tags, FileInfo* file)
 {
     char tag[5];
-    if (fread(tag, 1, 4, file->fp) != 4)
+    if (fread(tag, 1, 4, file->fp) != 4){
+        fprintf(stderr, E"ERROR: Failed to read frame tag\n"RST);
         return failure;
+    }
     tag[4] = '\0';
 
     uint frame_size = read_frame_size(file);
@@ -64,6 +69,7 @@ Status read_mp3_frame(Mp3Tag* tags, FileInfo* file)
     char *data = malloc(frame_size + 1);
     if (fread(data, sizeof(byte), frame_size, file->fp) != frame_size){
         free(data);
+        fprintf(stderr, E"ERROR: Failed to read frame data for tag %s\n"RST, tag);
         return failure;
     }
     data[frame_size] = '\0';
@@ -90,23 +96,27 @@ Status read_mp3_tags(Mp3Tag* tags, FileInfo* file){
     fseek(file->fp, 10, SEEK_SET);
 
     while(ftell(file->fp) < file->tag_end) {
-        if(!read_mp3_frame(tags, file))
+        if(!read_mp3_frame(tags, file)){
+            fprintf(stderr, E"ERROR: Failed to read MP3 frame\n"RST);
             return failure;
+        }
     }
     fclose(file->fp);
     return success;
 }
 
-Status display_mp3_tags(Mp3Tag* tags){
-    printf("--------------------------------\n");
-    printf("        MP3 TAG READER\n");
-    printf("--------------------------------\n");
-    printf("Title   : %s\n", tags->title);
-    printf("Artist  : %s\n", tags->artist);
-    printf("Album   : %s\n", tags->album);
-    printf("Year    : %s\n", tags->year);
-    printf("Genre   : %s\n", tags->genre);
-    printf("Comment : %s\n", tags->comment);
-    printf("--------------------------------\n");
+Status display_mp3_tags(Mp3Tag *tags)
+{
+    printf("\n");
+    printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
+    printf("%s        |                         MP3 TAG READER                             |%s\n", O, RST);
+    printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
+    printf("%s        |%s  Title   :%s %-55s %s|%s\n", O, G, W, tags->title, O, RST);
+    printf("%s        |%s  Artist  :%s %-55s %s|%s\n", O, G, W, tags->artist, O, RST);
+    printf("%s        |%s  Album   :%s %-55s %s|%s\n", O, G, W, tags->album, O, RST);
+    printf("%s        |%s  Year    :%s %-55s %s|%s\n", O, G, W, tags->year, O, RST);
+    printf("%s        |%s  Genre   :%s %-55s %s|%s\n", O, G, W, tags->genre, O, RST);
+    printf("%s        |%s  Comment :%s %-55s %s|%s\n", O, G, W, tags->comment, O, RST);
+    printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
     return success;
 }

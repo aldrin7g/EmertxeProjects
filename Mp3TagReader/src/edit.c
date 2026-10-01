@@ -27,6 +27,7 @@ Status check_mp3_tag(const char* edit_tag, FileInfo* file){
     if(strcmp(tag, edit_tag) == 0)
         return success;
 
+    fprintf(stderr, E"ERROR: Tag \"%s\" not found in the MP3 file\n"RST, edit_tag);
     return failure;
 }
 
@@ -37,15 +38,19 @@ Status write_new_tag_size(FILE* temp_fp, int frame_size){
     size_buffer[2] = (frame_size >> 8) & 0xFF;
     size_buffer[3] = frame_size & 0xFF;
 
-    if(fwrite(size_buffer, sizeof(byte), 4, temp_fp) != 4)
+    if(fwrite(size_buffer, sizeof(byte), 4, temp_fp) != 4){
+        fprintf(stderr, E"ERROR: Failed to write new tag size\n"RST);
         return failure;
+    }
     return success;
 }
 
 Status write_new_tag_data(FILE* temp_fp, const char* new_data){
     size_t len = strlen(new_data);
-    if(fwrite(new_data, sizeof(char), len, temp_fp) != len)
+    if(fwrite(new_data, sizeof(char), len, temp_fp) != len){
+        fprintf(stderr, E"ERROR: Failed to write new tag data\n"RST);
         return failure;
+    }
     return success;
 }
 
@@ -53,8 +58,10 @@ Status copy_remaining_data(FILE* temp_fp, FileInfo* file){
     byte buffer[1024];
     size_t bytes_read;
     while((bytes_read = fread(buffer, sizeof(byte), sizeof(buffer), file->fp)) > 0){
-        if(fwrite(buffer, sizeof(byte), bytes_read, temp_fp) != bytes_read)
+        if(fwrite(buffer, sizeof(byte), bytes_read, temp_fp) != bytes_read){
+            fprintf(stderr, E"ERROR: Failed to copy remaining data\n"RST);
             return failure;
+        }
     }
     return success;
 }
@@ -68,8 +75,10 @@ Status update_tag_end(FILE* temp_fp, int tag_size){
     size[3] = tag_size & 0x7F;
 
     fseek(temp_fp, 6, SEEK_SET);
-    if (fwrite(size, sizeof(byte), 4, temp_fp) != 4)
+    if (fwrite(size, sizeof(byte), 4, temp_fp) != 4){
+        fprintf(stderr, E"ERROR: Failed to update tag end\n"RST);
         return failure;
+    }
 
     fseek(temp_fp, pos, SEEK_SET);
     return success;
@@ -78,7 +87,7 @@ Status update_tag_end(FILE* temp_fp, int tag_size){
 Status edit_mp3_tag(const char* new_data, const char* edit_tag, FileInfo* file){
     FILE* temp_fp = fopen("temp.mp3", "wb");
     if(temp_fp==NULL){
-        fprintf(stderr, "ERROR: Unable to open temporary file for writing\n");
+        fprintf(stderr, E"ERROR: Unable to open temporary file for writing\n"RST);
         return failure;
     }
 
