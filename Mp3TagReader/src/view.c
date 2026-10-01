@@ -107,15 +107,15 @@ Status read_mp3_tags(Mp3Tag* tags, FileInfo* file){
 
 Status display_mp3_tags(Mp3Tag *tags)
 {
-    printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
-    printf("%s        |                         MP3 TAG READER                             |%s\n", O, RST);
-    printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
-    printf("%s        |%s  Title   :%s %-55s %s|%s\n", O, G, W, tags->title, O, RST);
-    printf("%s        |%s  Artist  :%s %-55s %s|%s\n", O, G, W, tags->artist, O, RST);
-    printf("%s        |%s  Album   :%s %-55s %s|%s\n", O, G, W, tags->album, O, RST);
-    printf("%s        |%s  Year    :%s %-55s %s|%s\n", O, G, W, tags->year, O, RST);
-    printf("%s        |%s  Genre   :%s %-55s %s|%s\n", O, G, W, tags->genre, O, RST);
-    printf("%s        |%s  Comment :%s %-55s %s|%s\n", O, G, W, tags->comment, O, RST);
-    printf("%s        +--------------------------------------------------------------------+%s\n", O, RST);
+    printf("%s        +------------------------------------------------------------+%s\n", O, RST);
+    printf("%s        |                     %sMP3 TAG READER V2.3%s                    |%s\n", O, Y, O, RST);
+    printf("%s        +------------------------------------------------------------+%s\n", O, RST);
+    printf("%s        |%s  Title   :%s %-47s %s|%s\n", O, G, W, tags->title, O, RST);
+    printf("%s        |%s  Artist  :%s %-47s %s|%s\n", O, G, W, tags->artist, O, RST);
+    printf("%s        |%s  Album   :%s %-47s %s|%s\n", O, G, W, tags->album, O, RST);
+    printf("%s        |%s  Year    :%s %-47s %s|%s\n", O, G, W, tags->year, O, RST);
+    printf("%s        |%s  Genre   :%s %-47s %s|%s\n", O, G, W, tags->genre, O, RST);
+    printf("%s        |%s  Comment :%s %-47s %s|%s\n", O, G, W, tags->comment, O, RST);
+    printf("%s        +------------------------------------------------------------+%s\n", O, RST);
     return success;
 }
