@@ -8,11 +8,6 @@ Status read_mp3_info_size(FileInfo* file){
         fprintf(stderr, E"ERROR: Failed to read tag size\n"RST);
         return failure;
     }
-    // int tag_size =
-    //       ((size[0] & 0x7F) << 21)
-    //     | ((size[1] & 0x7F) << 14)
-    //     | ((size[2] & 0x7F) << 7)
-    //     | (size[3] & 0x7F);
     file->tag_end = 10 + endian_convert(size);
     return success;
 }
@@ -27,16 +22,6 @@ int read_frame_size(FileInfo* file){
     fseek(file->fp, 3, SEEK_CUR);
     return frame_size-1; // Subtract 1 for the encoding byte
 }
-
-// uint convert_frame_size(byte* buffer){
-//     // Convert 4-byte big-endian frame size to integer
-//     uint size;
-//     size = (buffer[0] << 24) |
-//            (buffer[1] << 16) |
-//            (buffer[2] << 8)  |
-//            buffer[3];
-//     return size;
-// }
 
 Status skip_unknown_frame(char* tag, uint frame_size, FileInfo* file){
     if (strcmp(tag, "TIT2") != 0 &&

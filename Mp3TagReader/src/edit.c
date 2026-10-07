@@ -31,11 +31,6 @@ Status check_mp3_tag(const char* edit_tag, FileInfo* file){
 }
 
 Status write_new_tag_size(FILE* temp_fp, int frame_size){
-    // byte size_buffer[4];
-    // size_buffer[0] = (frame_size >> 24) & 0xFF;
-    // size_buffer[1] = (frame_size >> 16) & 0xFF;
-    // size_buffer[2] = (frame_size >> 8) & 0xFF;
-    // size_buffer[3] = frame_size & 0xFF;
     endian_convert((byte*)&frame_size);
 
     if(fwrite(&frame_size, sizeof(byte), 4, temp_fp) != 4){
@@ -68,11 +63,6 @@ Status copy_remaining_data(FILE* temp_fp, FileInfo* file){
 
 Status update_tag_end(FILE* temp_fp, int tag_size){
     int pos = ftell(temp_fp);
-    //byte size[4];
-    // size[0] = (tag_size >> 21) & 0x7F;
-    // size[1] = (tag_size >> 14) & 0x7F;
-    // size[2] = (tag_size >> 7)  & 0x7F;
-    // size[3] = tag_size & 0x7F;
     endian_convert((byte*)&tag_size);
 
     fseek(temp_fp, 6, SEEK_SET);
