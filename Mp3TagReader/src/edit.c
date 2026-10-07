@@ -33,7 +33,7 @@ Status check_mp3_tag(const char* edit_tag, FileInfo* file){
 Status write_new_tag_size(FILE* temp_fp, int frame_size){
     endian_convert((byte*)&frame_size);
 
-    if(fwrite(&frame_size, sizeof(byte), 4, temp_fp) != 4){
+    if(fwrite(&frame_size, sizeof(int), 1, temp_fp) != 1){
         fprintf(stderr, E"ERROR: Failed to write new tag size\n"RST);
         return failure;
     }
@@ -66,7 +66,7 @@ Status update_tag_end(FILE* temp_fp, int tag_size){
     endian_convert((byte*)&tag_size);
 
     fseek(temp_fp, 6, SEEK_SET);
-    if (fwrite(&tag_size, sizeof(byte), 4, temp_fp) != 4){
+    if (fwrite(&tag_size, sizeof(int), 1, temp_fp) != 1){
         fprintf(stderr, E"ERROR: Failed to update tag end\n"RST);
         return failure;
     }
@@ -101,9 +101,9 @@ Status edit_mp3_tag(const char* new_data, const char* edit_tag, FileInfo* file){
     fwrite(tag_frame, sizeof(char), 4, temp_fp);
 
     // Adjust offset position in source file to skip old frame data
-    byte size_buffer[4];
-    fread(size_buffer, sizeof(byte), 4, file->fp);
-    int old_frame_size = endian_convert(size_buffer);
+    int size_buf;
+    fread(&size_buf, sizeof(int), 1, file->fp);
+    int old_frame_size = endian_convert((byte*)&size_buf);
 
     int new_frame_size = strlen(new_data)+1;
     write_new_tag_size(temp_fp, new_frame_size); // +1 for the encoding byte

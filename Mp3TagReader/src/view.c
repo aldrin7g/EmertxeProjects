@@ -2,13 +2,13 @@
 
 Status read_mp3_info_size(FileInfo* file){
     // Read Tag Size
-    byte size[4];
+    int size;
     fseek(file->fp, 6, SEEK_SET);
-    if(fread(size, sizeof(byte), 4, file->fp) != 4){
+    if(fread(&size, sizeof(int), 1, file->fp) != 1){
         fprintf(stderr, E"ERROR: Failed to read tag size\n"RST);
         return failure;
     }
-    file->tag_end = 10 + endian_convert(size);
+    file->tag_end = 10 + endian_convert((byte*)&size);
     return success;
 }
 
