@@ -31,13 +31,14 @@ Status check_mp3_tag(const char* edit_tag, FileInfo* file){
 }
 
 Status write_new_tag_size(FILE* temp_fp, int frame_size){
-    byte size_buffer[4];
-    size_buffer[0] = (frame_size >> 24) & 0xFF;
-    size_buffer[1] = (frame_size >> 16) & 0xFF;
-    size_buffer[2] = (frame_size >> 8) & 0xFF;
-    size_buffer[3] = frame_size & 0xFF;
+    // byte size_buffer[4];
+    // size_buffer[0] = (frame_size >> 24) & 0xFF;
+    // size_buffer[1] = (frame_size >> 16) & 0xFF;
+    // size_buffer[2] = (frame_size >> 8) & 0xFF;
+    // size_buffer[3] = frame_size & 0xFF;
+    endian_convert((byte*)&frame_size);
 
-    if(fwrite(size_buffer, sizeof(byte), 4, temp_fp) != 4){
+    if(fwrite(&frame_size, sizeof(byte), 4, temp_fp) != 4){
         fprintf(stderr, E"ERROR: Failed to write new tag size\n"RST);
         return failure;
     }
@@ -67,14 +68,15 @@ Status copy_remaining_data(FILE* temp_fp, FileInfo* file){
 
 Status update_tag_end(FILE* temp_fp, int tag_size){
     int pos = ftell(temp_fp);
-    byte size[4];
-    size[0] = (tag_size >> 21) & 0x7F;
-    size[1] = (tag_size >> 14) & 0x7F;
-    size[2] = (tag_size >> 7)  & 0x7F;
-    size[3] = tag_size & 0x7F;
+    //byte size[4];
+    // size[0] = (tag_size >> 21) & 0x7F;
+    // size[1] = (tag_size >> 14) & 0x7F;
+    // size[2] = (tag_size >> 7)  & 0x7F;
+    // size[3] = tag_size & 0x7F;
+    endian_convert((byte*)&tag_size);
 
     fseek(temp_fp, 6, SEEK_SET);
-    if (fwrite(size, sizeof(byte), 4, temp_fp) != 4){
+    if (fwrite(&tag_size, sizeof(byte), 4, temp_fp) != 4){
         fprintf(stderr, E"ERROR: Failed to update tag end\n"RST);
         return failure;
     }
@@ -111,7 +113,7 @@ Status edit_mp3_tag(const char* new_data, const char* edit_tag, FileInfo* file){
     // Adjust offset position in source file to skip old frame data
     byte size_buffer[4];
     fread(size_buffer, sizeof(byte), 4, file->fp);
-    int old_frame_size = convert_frame_size(size_buffer);
+    int old_frame_size = endian_convert(size_buffer);
 
     int new_frame_size = strlen(new_data)+1;
     write_new_tag_size(temp_fp, new_frame_size); // +1 for the encoding byte

@@ -59,3 +59,13 @@ Status validate_mp3_file(const char* fname, FileInfo* file_info){
     file_info->fname = fname;
     return success;
 }
+
+int endian_convert(byte* size_buf){
+    for(int i=0; i<2; i++){
+        char temp = size_buf[i];
+        size_buf[i] = size_buf[4-i-1];
+        size_buf[4-i-1] = temp;
+    }
+    int* ptr = (int *)size_buf;
+    return *ptr;
+}

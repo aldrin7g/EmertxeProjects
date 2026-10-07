@@ -49,5 +49,6 @@ typedef struct{
 Status validate_ip_arg_count(int argc);
 Type chk_operation_type(const char* op_type);
 Status validate_mp3_file(const char* fname, FileInfo* file);
+int endian_convert(byte* size_buf);
 
 #endif
